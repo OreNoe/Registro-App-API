@@ -21,7 +21,7 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({version: 'v4', auth});
 
-const sheetId = '1gwRs4BXhF2GN6-X0-34_mLUR8OjeGEeWSHvExclMH3Q';
+const sheetId = process.env.SHEET_ID;
 
 const app = express();
 app.use(bodyParser.json());
