@@ -21,7 +21,7 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({version: 'v4', auth});
 
-const sheetId = '1gwRs4BXhF2GN6-X0-34_mLUR8OjeGEeWSHvExclMH3Q';
+const sheetId = process.env.SHEET_ID;
 
 const app = express();
 app.use(bodyParser.json());
@@ -333,101 +333,6 @@ app.post('/checkUser', (req, res) => {
     }).catch((error) => {
         console.log("Error getting document:", error);
     });
-});
-
-
-app.get('/addExcelToEvent', (req, res) => {
-    db.collection("events").get().then((querySnapshot) => {
-      let events = [];
-      querySnapshot.forEach((doc) => {
-        events.push(doc.id);
-      });
-  
-      let options = "";
-      for (let i = 0; i < events.length; i++) {
-        options += `<option value="${events[i]}">${events[i]}</option>`;
-      }
-  
-      res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Upload Excel File</title>
-      </head>
-      <body>
-        <form action="/addExcelToEvent" method="post" enctype="multipart/form-data">
-          <label for="event-select">Select an event:</label>
-            <select name="event">
-                ${events.map((event) => `<option value="${event}">${event}</option>`)}
-            </select>
-            <input type="file" name="excel_file" accept=".xlsx">
-            <br>
-            <br>
-          <input type="submit" value="Upload Excel File">
-        </form>
-      </body>
-      </html>      
-      `);
-    });
-  });
-  
-
-app.post('/addExcelToEvent', (req, res) => {
-    const event = req.body.event;
-    console.log(req.body);
-    const eventSheetName = event.replace(/\s+/g, ''); // Remove whitespace from the event name
-    const excelFile = req.files.excel_file;
-
-    /*const workbook = xlsx.read(file.data);
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const data = xlsx.utils.sheet_to_json(sheet);   
-
-    //check if the format is correct
-    if (data[0].Nombre === undefined || data[0].Apellido === undefined || data[0].Email === undefined || data[0].Nivel === undefined || data[0].Estado === undefined || data[0].Encargado === undefined) {
-        res.send("Formato incorrecto");
-        return;
-    }
-    
-
-    data.forEach((row) => {
-        //check if row is empty
-        if (row.Nombre === undefined || row.Apellido === undefined || row.Email === undefined || row.Nivel === undefined || row.Estado === undefined || row.Encargado === undefined) {
-            return;
-        }
-
-        //create user class
-        const user = new User(row.Nombre, row.Apellido, row.Email, row.Nivel, row.Estado, row.Encargado);
-        //add user to db
-        db.collection("events").doc(event).collection("users").doc(user.email).set({
-            name: user.name,
-            surname: user.surname,
-            email: user.email,
-            lvl: user.lvl,
-            status: user.status,
-            encargado: user.encargado,
-        }).then(() => {
-            console.log("Document successfully written!");
-        }).catch((error) => {
-            console.error("Error writing document: ", error);
-        });
-
-        axios.post('https://registra-app.uc.r.appspot.com/addUserToEvent', {
-            eventName: event,
-            name: user.name,
-            surname: user.surname,
-            email: user.email,
-            lvl: user.lvl,
-            status: user.status,
-            encargado: user.encargado,
-        }).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            console.log(error);
-        });
-    });*/
-
-    res.send("Excel file uploaded successfully to event: " + event);
 });
 
 app.get('/', (req, res) => {
