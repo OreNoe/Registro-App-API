@@ -20,11 +20,6 @@
     "googleapis": "^111.0.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.1",
-<<<<<<< HEAD
-=======
-    "pdf-to-printer": "^5.5.0",
-    "pdfkit": "^0.13.0",
->>>>>>> 76afc52eb67e6d6d7cf49739dcd32e6442e581b6
     "xlsx": "^0.18.5"
   }
 }
